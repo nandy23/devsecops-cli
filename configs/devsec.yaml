@@ -1,0 +1,145 @@
+# Example devsec configuration.
+# Precedence (highest wins): CLI flags > env (DEVSEC_*) > this file > defaults.
+version: 1
+
+# Preset bundle of recommendation rules.
+#   minimal  → must-haves only: gitleaks, semgrep, trivy (secret/sast/container/deps)
+#   balanced → adds syft (SBOM), cosign (signing), checkov (IaC)  [default]
+#   strict   → adds kyverno (policy), falco (runtime), snyk (extra SCA)
+profile: balanced   # minimal | balanced | strict
+
+detect:
+  # Extra directory names to ignore on top of the built-in list.
+  ignore:
+    - testdata
+    - third_party
+
+rules:
+  # Layered sources; later sources override earlier ones by rule id.
+  sources:
+    - embedded
+    - ./rules
+  # Opt out of specific rules by id.
+  disabled:
+    - runtime-falco
+
+scoring:
+  # Override the default category weights (must reflect your risk model).
+  weights:
+    sast: 10
+    secret_scan: 10
+    dependency_scan: 10
+    iac_scan: 10
+    sbom: 15
+    container_scan: 15
+    signing: 10
+    policy: 10
+    runtime: 10
+
+generate:
+  platform: github   # github | gitlab
+
+report:
+  format: markdown   # markdown | html | json | sarif
+  output: ""         # empty = stdout
+
+connectors:
+  # Enterprise integrations. Collected results merge into the unified report and
+  # credit the security categories they cover (e.g. SonarQube → SAST).
+  sonarqube:
+    enabled: false
+    url: https://sonarqube.example.com
+    project: my-project-key
+    # NEVER commit a token. Reference an environment variable instead:
+    token: "env:SONAR_TOKEN"
+    # You can also enable entirely from the environment:
+    #   DEVSEC_SONAR_URL, DEVSEC_SONAR_PROJECT, DEVSEC_SONAR_TOKEN
+
+  harbor:
+    # Harbor's built-in Trivy scans → credits the container_scan category.
+    enabled: false
+    url: https://harbor.example.com
+    project: my-project
+    username: "robot$ci"        # prefer a robot account
+    secret: "env:HARBOR_SECRET" # never commit the secret
+    # Or from the environment:
+    #   DEVSEC_HARBOR_URL, DEVSEC_HARBOR_PROJECT, DEVSEC_HARBOR_USERNAME, DEVSEC_HARBOR_SECRET
+
+  nexus:
+    # Nexus IQ (Lifecycle) component analysis → credits the dependency_scan category.
+    enabled: false
+    url: https://nexus-iq.example.com
+    application: demo-app          # application public id
+    username: admin
+    secret: "env:NEXUS_SECRET"     # never commit the secret
+    # Or from the environment:
+    #   DEVSEC_NEXUS_URL, DEVSEC_NEXUS_APP, DEVSEC_NEXUS_USERNAME, DEVSEC_NEXUS_SECRET
+
+  vault:
+    # HashiCorp Vault secret management posture → credits the secret_scan category.
+    enabled: false
+    url: https://vault.example.com:8200
+    token: "env:VAULT_TOKEN"       # never commit the token
+    # Or from the environment:
+    #   DEVSEC_VAULT_URL, DEVSEC_VAULT_TOKEN
+
+  dependency_track:
+    # OWASP Dependency-Track SBOM analysis → credits the sbom category.
+    enabled: false
+    url: https://dtrack.example.com
+    project: my-project
+    version: ""                    # optional project version
+    api_key: "env:DTRACK_API_KEY"
+    # Env: DEVSEC_DTRACK_URL, DEVSEC_DTRACK_PROJECT, DEVSEC_DTRACK_APIKEY
+
+  xray:
+    # JFrog Xray violations → credits dependency_scan + container_scan.
+    enabled: false
+    url: https://mycompany.jfrog.io
+    watch: my-watch
+    token: "env:XRAY_TOKEN"
+    # Env: DEVSEC_XRAY_URL, DEVSEC_XRAY_WATCH, DEVSEC_XRAY_TOKEN
+
+  defectdojo:
+    # DefectDojo aggregated findings → credits categories by finding tag.
+    enabled: false
+    url: https://defectdojo.example.com
+    product: my-product
+    token: "env:DEFECTDOJO_TOKEN"
+    # Env: DEVSEC_DEFECTDOJO_URL, DEVSEC_DEFECTDOJO_PRODUCT, DEVSEC_DEFECTDOJO_TOKEN
+
+  kyverno:
+    # Kubernetes PolicyReports (Kyverno / Policy Reporter) → credits the policy category.
+    enabled: false
+    url: https://10.0.0.1:6443     # kube-apiserver
+    token: "env:KYVERNO_TOKEN"     # service-account token
+    namespace: ""                  # empty = cluster-wide
+    insecure: false                # true to skip TLS verify (self-signed apiserver)
+    # Env: DEVSEC_KYVERNO_URL, DEVSEC_KYVERNO_TOKEN, DEVSEC_KYVERNO_NAMESPACE
+
+  falco:
+    # Falco DaemonSet readiness in the cluster → credits the runtime category.
+    enabled: false
+    url: https://10.0.0.1:6443     # kube-apiserver
+    token: "env:FALCO_TOKEN"
+    namespace: falco
+    daemonset: falco
+    insecure: false
+    # Env: DEVSEC_FALCO_URL, DEVSEC_FALCO_TOKEN, DEVSEC_FALCO_NAMESPACE
+
+  rekor:
+    # Sigstore Rekor transparency-log entries → credits the signing category.
+    enabled: false
+    url: https://rekor.sigstore.dev
+    email: ci@example.com          # signer identity to search for
+    hash: ""                       # OR an artifact sha256
+    # Env: DEVSEC_REKOR_URL, DEVSEC_REKOR_EMAIL, DEVSEC_REKOR_HASH
+
+  jenkins:
+    # Audit a remote Jenkins job: last build + security stages in its config.
+    enabled: false
+    url: https://jenkins.example.com
+    job: my-job
+    username: ci
+    token: "env:JENKINS_TOKEN"     # API token
+    # Env: DEVSEC_JENKINS_URL, DEVSEC_JENKINS_JOB, DEVSEC_JENKINS_USERNAME, DEVSEC_JENKINS_TOKEN

@@ -1,0 +1,202 @@
+# Default devsec recommendation rules.
+#
+# Rules are declarative data, not code. Each rule matches against the Analysis
+# and emits a tool recommendation tied to a security category and pipeline
+# stage. Override or disable these via project ./rules or ~/.devsec/rules.
+rules:
+  - id: container-trivy
+    description: Dockerfile present should be scanned for CVEs
+    category: container_scan
+    profiles: [minimal, balanced, strict]
+    when:
+      all:
+        - tech.kind: container
+          tech.name: Docker
+    recommend:
+      tool: trivy
+      severity: high
+      stage: container_scan
+    rationale: >
+      Images built from this Dockerfile can ship known CVEs in OS and
+      application layers. Scan images before pushing to a registry.
+    weight_hint: 15
+
+  - id: iac-checkov-terraform
+    description: Terraform should be statically analyzed
+    category: iac_scan
+    profiles: [balanced, strict]
+    when:
+      all:
+        - tech.kind: iac
+          tech.name: Terraform
+    recommend:
+      tool: checkov
+      severity: high
+      stage: iac_scan
+    rationale: >
+      Terraform can provision insecure infrastructure (public buckets, open
+      security groups). Checkov enforces policy before apply.
+    weight_hint: 10
+
+  - id: secrets-gitleaks
+    description: Every repository should be scanned for secrets
+    category: secret_scan
+    profiles: [minimal, balanced, strict]
+    when:
+      any:
+        - tech.kind: language
+          tech.name: Go
+        - tech.kind: language
+          tech.name: Python
+        - tech.kind: language
+          tech.name: NodeJS
+        - tech.kind: language
+          tech.name: Java
+    recommend:
+      tool: gitleaks
+      severity: high
+      stage: secret_scan
+    rationale: >
+      Hardcoded credentials are a leading breach cause. Gitleaks detects
+      secrets in code and git history on every push.
+    weight_hint: 10
+
+  - id: sast-semgrep
+    description: Source code should be statically analyzed
+    category: sast
+    profiles: [minimal, balanced, strict]
+    when:
+      any:
+        - tech.kind: language
+          tech.name: Go
+        - tech.kind: language
+          tech.name: Python
+        - tech.kind: language
+          tech.name: NodeJS
+        - tech.kind: language
+          tech.name: Java
+    recommend:
+      tool: semgrep
+      severity: medium
+      stage: sast
+    rationale: >
+      SAST finds injection, auth and crypto bugs early. Semgrep is fast,
+      polyglot and rule-driven.
+    weight_hint: 10
+
+  - id: sbom-syft
+    description: Build artifacts should ship a Software Bill of Materials
+    category: sbom
+    profiles: [balanced, strict]
+    when:
+      any:
+        - tech.kind: container
+          tech.name: Docker
+        - tech.kind: language
+          tech.name: Go
+    recommend:
+      tool: syft
+      severity: medium
+      stage: sbom
+    rationale: >
+      An SBOM enables fast response to new CVEs (e.g. log4shell) by knowing
+      exactly what shipped. Syft generates SPDX/CycloneDX.
+    weight_hint: 15
+
+  - id: signing-cosign
+    description: Container images should be signed
+    category: signing
+    profiles: [balanced, strict]
+    when:
+      all:
+        - tech.kind: container
+          tech.name: Docker
+    recommend:
+      tool: cosign
+      severity: medium
+      stage: artifact
+    rationale: >
+      Signing proves image provenance and integrity, enabling admission
+      controllers to reject untrusted images. Cosign is the Sigstore standard.
+    weight_hint: 10
+
+  - id: policy-kyverno
+    description: Kubernetes workloads should enforce admission policy
+    category: policy
+    profiles: [strict]
+    when:
+      all:
+        - tech.kind: orchestrator
+          tech.name: Kubernetes
+    recommend:
+      tool: kyverno
+      severity: medium
+      stage: deploy
+    rationale: >
+      Kyverno enforces security policy (no privileged pods, required labels)
+      at admission time without writing code.
+    weight_hint: 10
+
+  - id: dependency-scan-trivy-fs
+    description: Dependencies should be scanned for vulnerabilities
+    category: dependency_scan
+    profiles: [minimal, balanced, strict]
+    when:
+      any:
+        - tech.kind: package_manager
+          tech.name: npm
+        - tech.kind: package_manager
+          tech.name: pip
+        - tech.kind: package_manager
+          tech.name: maven
+        - tech.kind: package_manager
+          tech.name: go modules
+    recommend:
+      tool: trivy
+      severity: high
+      stage: dependencies
+    rationale: >
+      Most application risk comes from third-party dependencies. Scan the
+      dependency tree for known vulnerable versions on every build.
+    weight_hint: 10
+
+  - id: runtime-falco
+    description: Kubernetes clusters benefit from runtime threat detection
+    category: runtime
+    profiles: [strict]
+    when:
+      all:
+        - tech.kind: orchestrator
+          tech.name: Kubernetes
+    recommend:
+      tool: falco
+      severity: low
+      stage: deploy
+    rationale: >
+      Runtime detection catches what shifts-left misses: live exploitation,
+      crypto-miners, unexpected shells. Falco is the CNCF runtime standard.
+    weight_hint: 10
+
+  - id: dependency-snyk
+    description: Snyk is a popular SCA alternative with fix guidance
+    category: dependency_scan
+    profiles: [strict]
+    when:
+      any:
+        - tech.kind: package_manager
+          tech.name: npm
+        - tech.kind: package_manager
+          tech.name: pip
+        - tech.kind: package_manager
+          tech.name: maven
+        - tech.kind: package_manager
+          tech.name: go modules
+    recommend:
+      tool: snyk
+      severity: high
+      stage: dependencies
+    rationale: >
+      Snyk complements Trivy for software composition analysis, adding a rich
+      vulnerability database and auto-fix pull requests. Recommended in the
+      strict profile as an additional dependency-scanning option.
+    weight_hint: 10

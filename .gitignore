@@ -1,0 +1,6 @@
+/bin/
+*.out
+*.test
+coverage.txt
+devsec-report.*
+.DS_Store

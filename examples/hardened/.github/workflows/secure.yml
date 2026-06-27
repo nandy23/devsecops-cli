@@ -1,0 +1,13 @@
+name: secure
+on: [push]
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: semgrep ci
+      - run: gitleaks detect
+      - run: trivy fs .
+      - run: trivy image app:latest
+      - run: syft . -o spdx-json
+      - run: cosign sign app:latest

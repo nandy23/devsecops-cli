@@ -1,0 +1,243 @@
+# Tool knowledge base powering `devsec explain <tool>`.
+tools:
+  - name: trivy
+    category: container_scan
+    purpose: All-in-one scanner for container images, filesystems and IaC, finding CVEs and misconfigurations.
+    advantages:
+      - Single binary, no server required
+      - Fast with an offline-capable vulnerability DB
+      - Scans images, filesystems, git repos and IaC
+      - Native SARIF output for GitHub code scanning
+    when_to_use: Use whenever you build container images or want a quick dependency/IaC vulnerability gate.
+    alternatives: [grype, clair, snyk]
+    stage: container_scan
+    license: Apache-2.0
+    links:
+      - https://github.com/aquasecurity/trivy
+
+  - name: semgrep
+    category: sast
+    purpose: Fast, polyglot static analysis using human-readable pattern rules.
+    advantages:
+      - Very fast, runs in CI on diffs
+      - Thousands of community rules
+      - Low false-positive rate vs traditional SAST
+      - SARIF output
+    when_to_use: Use as your primary SAST gate for application source code.
+    alternatives: [codeql, sonarqube, bandit]
+    stage: sast
+    license: LGPL-2.1
+    links:
+      - https://semgrep.dev
+
+  - name: codeql
+    category: sast
+    purpose: Deep semantic code analysis treating code as a queryable database.
+    advantages:
+      - Powerful dataflow/taint analysis
+      - Deep coverage for supported languages
+      - First-class GitHub integration
+    when_to_use: Use for deep security analysis when you are on GitHub and can afford longer scans.
+    alternatives: [semgrep, sonarqube]
+    stage: sast
+    license: Proprietary (free for OSS)
+    links:
+      - https://codeql.github.com
+
+  - name: gitleaks
+    category: secret_scan
+    purpose: Detect hardcoded secrets and credentials in code and git history.
+    advantages:
+      - Scans full git history
+      - Configurable regex/entropy rules
+      - Fast, runs as a pre-commit hook or in CI
+    when_to_use: Use on every repository, ideally as a pre-commit hook plus a CI gate.
+    alternatives: [trufflehog, detect-secrets]
+    stage: secret_scan
+    license: MIT
+    links:
+      - https://github.com/gitleaks/gitleaks
+
+  - name: trufflehog
+    category: secret_scan
+    purpose: Find and verify leaked credentials across many sources.
+    advantages:
+      - Verifies whether found secrets are live
+      - 700+ credential detectors
+      - Scans git, filesystems, S3 and more
+    when_to_use: Use when you want verification that detected secrets are actually active.
+    alternatives: [gitleaks, detect-secrets]
+    stage: secret_scan
+    license: AGPL-3.0
+    links:
+      - https://github.com/trufflesecurity/trufflehog
+
+  - name: checkov
+    category: iac_scan
+    purpose: Static analysis for infrastructure-as-code across Terraform, CloudFormation, Kubernetes and more.
+    advantages:
+      - 1000+ built-in policies
+      - Supports Terraform, K8s, Helm, ARM, CloudFormation
+      - Custom policies in Python or YAML
+      - SARIF output
+    when_to_use: Use to gate any IaC change before plan/apply.
+    alternatives: [terrascan, tfsec, kics]
+    stage: iac_scan
+    license: Apache-2.0
+    links:
+      - https://www.checkov.io
+
+  - name: terrascan
+    category: iac_scan
+    purpose: Detect compliance and security violations in IaC.
+    advantages:
+      - OPA/Rego policy engine
+      - Multi-IaC support
+      - Compliance mappings (CIS, SOC2)
+    when_to_use: Use when you want Rego-based custom policy for IaC.
+    alternatives: [checkov, tfsec]
+    stage: iac_scan
+    license: Apache-2.0
+    links:
+      - https://github.com/tenable/terrascan
+
+  - name: syft
+    category: sbom
+    purpose: Generate a Software Bill of Materials from images and filesystems.
+    advantages:
+      - SPDX and CycloneDX output
+      - Pairs with grype for scanning
+      - Broad ecosystem coverage
+    when_to_use: Use in the build stage to produce an SBOM artifact for every release.
+    alternatives: [cdxgen, tern]
+    stage: sbom
+    license: Apache-2.0
+    links:
+      - https://github.com/anchore/syft
+
+  - name: cosign
+    category: signing
+    purpose: Sign, verify and attest container images and artifacts (Sigstore).
+    advantages:
+      - Keyless signing via OIDC
+      - Stores signatures in the OCI registry
+      - Supports SBOM and provenance attestations
+    when_to_use: Use to sign images after build so downstream admission can verify provenance.
+    alternatives: [notation, notary]
+    stage: artifact
+    license: Apache-2.0
+    links:
+      - https://github.com/sigstore/cosign
+
+  - name: kyverno
+    category: policy
+    purpose: Kubernetes-native policy engine for admission control.
+    advantages:
+      - Policies as Kubernetes resources, no new language
+      - Validate, mutate and generate resources
+      - Verify image signatures at admission
+    when_to_use: Use to enforce security guardrails on Kubernetes workloads.
+    alternatives: [opa-gatekeeper, polaris]
+    stage: deploy
+    license: Apache-2.0
+    links:
+      - https://kyverno.io
+
+  - name: falco
+    category: runtime
+    purpose: Runtime threat detection for containers and Kubernetes using kernel events.
+    advantages:
+      - Detects live exploitation and anomalous behavior
+      - CNCF graduated project
+      - Rich rule ecosystem
+    when_to_use: Use to detect runtime threats that shift-left scanning cannot catch.
+    alternatives: [tetragon, tracee]
+    stage: deploy
+    license: Apache-2.0
+    links:
+      - https://falco.org
+
+  - name: grype
+    category: container_scan
+    purpose: Vulnerability scanner for container images and filesystems.
+    advantages:
+      - Pairs natively with syft SBOMs
+      - Simple CLI, fast
+      - Good accuracy
+    when_to_use: Use when you already produce SBOMs with syft and want matching scanning.
+    alternatives: [trivy, clair]
+    stage: container_scan
+    license: Apache-2.0
+    links:
+      - https://github.com/anchore/grype
+
+  - name: kubescape
+    category: policy
+    purpose: Kubernetes security posture scanning against frameworks like NSA and MITRE.
+    advantages:
+      - Scans manifests and live clusters
+      - Compliance framework mappings
+      - CI-friendly
+    when_to_use: Use to assess Kubernetes posture against recognized frameworks.
+    alternatives: [kyverno, polaris, kube-bench]
+    stage: iac_scan
+    license: Apache-2.0
+    links:
+      - https://kubescape.io
+
+  - name: hadolint
+    category: container_scan
+    purpose: Dockerfile linter that enforces best practices and flags insecure instructions.
+    advantages:
+      - Catches insecure/unpinned base images and bad practices early
+      - Wraps ShellCheck for inline RUN scripts
+      - Fast, single binary, JSON/SARIF output
+    when_to_use: Use to lint every Dockerfile before building images.
+    alternatives: [dockle, trivy config]
+    stage: build
+    license: GPL-3.0
+    links:
+      - https://github.com/hadolint/hadolint
+
+  - name: tfsec
+    category: iac_scan
+    purpose: Static analysis security scanner for Terraform code.
+    advantages:
+      - Fast Terraform-focused checks
+      - Clear remediation guidance
+      - JSON/SARIF output, custom checks
+    when_to_use: Use to gate Terraform changes (now part of the Trivy project).
+    alternatives: [checkov, terrascan, trivy config]
+    stage: iac_scan
+    license: MIT
+    links:
+      - https://github.com/aquasecurity/tfsec
+
+  - name: snyk
+    category: dependency_scan
+    purpose: Developer-first security platform for open-source dependencies, code, containers and IaC.
+    advantages:
+      - Rich vulnerability database with remediation advice
+      - Auto-fix pull requests for vulnerable dependencies
+      - Scans dependencies, code (SAST), containers and IaC
+      - SARIF and JSON output for CI ingestion
+    when_to_use: Use for software composition analysis with actionable fix guidance, especially in developer workflows.
+    alternatives: [trivy, grype, nexus-iq, dependabot]
+    stage: dependencies
+    license: Proprietary (free tier available)
+    links:
+      - https://snyk.io
+
+  - name: sonarqube
+    category: sast
+    purpose: Continuous code quality and security platform with deep language coverage.
+    advantages:
+      - Tracks quality and security over time
+      - Quality gates block bad merges
+      - Broad language support
+    when_to_use: Use as a central code-quality and security hub across many repos.
+    alternatives: [semgrep, codeql]
+    stage: sast
+    license: LGPL-3.0 (Community)
+    links:
+      - https://www.sonarsource.com
