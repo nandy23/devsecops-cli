@@ -58,7 +58,7 @@ go install github.com/nandy23/devsecops-cli/cmd/devsec@latest
 
 Global flags: `-p/--path`, `-c/--config`, `-v/--verbose`, `--json`.
 
-Planned: `fix`, `migrate`, `plugin`, `update` (see [ROADMAP.md](ROADMAP.md)).
+Planned: `migrate`, `plugin`, `update`.
 
 ## Quickstart
 
@@ -83,7 +83,7 @@ CLI ─▶ Application services ─▶ Domain (model, rules, scoring, IR)
                                         generators, reporters, knowledge base)
 ```
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the full design, [PRODUCT.md](PRODUCT.md) for the vision, and [docs/](docs/) for package details.
+See [docs/](docs/) — including the [Getting Started guide](docs/GETTING_STARTED.md) — for setup and usage details.
 
 ### Layout
 
@@ -101,7 +101,7 @@ rules/ knowledge/ templates/   embedded, overridable data
 ## Enterprise connectors
 
 devsec can pull findings from external platforms and fold them into the unified
-score/report. Supported today (more planned — see [ROADMAP.md](ROADMAP.md)):
+score/report. Supported today (more planned):
 
 | Connector | Reads | Credits category |
 |-----------|-------|------------------|
