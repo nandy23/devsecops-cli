@@ -4,3 +4,9 @@
 coverage.txt
 devsec-report.*
 .DS_Store
+
+# Internal planning/design docs — kept locally, not published
+PRODUCT.md
+ARCHITECTURE.md
+ROADMAP.md
+CONTRIBUTING.md
