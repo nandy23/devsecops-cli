@@ -10,5 +10,6 @@ func Builtin() []port.Detector {
 		ContainerDetector{},
 		InfraDetector{},
 		CIDetector{},
+		LintDetector{},
 	}
 }

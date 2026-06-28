@@ -121,19 +121,21 @@ func (c *Container) OpenRepo(path string) (port.FileSystem, error) {
 func toolSpecs(cfg config.Config) map[string]apptool.Spec {
 	specs := map[string]apptool.Spec{
 		// Scanners and signing/SBOM tools: plain passthrough.
-		"gitleaks":   {Bin: "gitleaks"},
-		"semgrep":    {Bin: "semgrep"},
-		"snyk":       {Bin: "snyk"},
-		"trivy":      {Bin: "trivy"},
-		"checkov":    {Bin: "checkov"},
-		"terrascan":  {Bin: "terrascan"},
-		"tfsec":      {Bin: "tfsec"},
-		"hadolint":   {Bin: "hadolint"},
-		"grype":      {Bin: "grype"},
-		"syft":       {Bin: "syft"},
-		"cosign":     {Bin: "cosign"},
-		"kubescape":  {Bin: "kubescape"},
-		"trufflehog": {Bin: "trufflehog"},
+		"gitleaks":         {Bin: "gitleaks"},
+		"semgrep":          {Bin: "semgrep"},
+		"snyk":             {Bin: "snyk"},
+		"trivy":            {Bin: "trivy"},
+		"checkov":          {Bin: "checkov"},
+		"terrascan":        {Bin: "terrascan"},
+		"tfsec":            {Bin: "tfsec"},
+		"hadolint":         {Bin: "hadolint"},
+		"grype":            {Bin: "grype"},
+		"dependency-check": {Bin: "dependency-check"},
+		"pip-audit":        {Bin: "pip-audit"},
+		"syft":             {Bin: "syft"},
+		"cosign":           {Bin: "cosign"},
+		"kubescape":        {Bin: "kubescape"},
+		"trufflehog":       {Bin: "trufflehog"},
 	}
 
 	// Vault: inject address and token from the connector config.

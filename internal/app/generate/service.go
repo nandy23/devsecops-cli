@@ -44,7 +44,13 @@ func BuildSpec(a model.Analysis, platform string) pipeline.Spec {
 		stageTools[k] = append(stageTools[k], r.Tool)
 	}
 
-	spec := pipeline.Spec{Name: "devsec-secure-pipeline", Platform: platform}
+	// Always offer SonarQube (sonar-scanner CLI) as a SAST step alongside the
+	// recommended SAST tool, since it is the most common enterprise SAST.
+	if !containsTool(stageTools[pipeline.StageSAST], "sonarqube") {
+		stageTools[pipeline.StageSAST] = append(stageTools[pipeline.StageSAST], "sonarqube")
+	}
+
+	spec := pipeline.Spec{Name: "devsec-secure-pipeline", Platform: platform, Lang: primaryLang(a)}
 	var prev string
 	for _, kind := range pipeline.CanonicalOrder() {
 		tools := stageTools[kind]
@@ -77,6 +83,38 @@ func (s *Service) Generate(ctx context.Context, a model.Analysis, platform strin
 	spec := BuildSpec(a, platform)
 	files, err := g.Generate(ctx, spec)
 	return files, spec, err
+}
+
+// primaryLang returns a normalized language key for pipeline generation, picking
+// the highest-confidence detected language.
+func primaryLang(a model.Analysis) string {
+	best := ""
+	bestConf := 0.0
+	for _, t := range a.Technologies {
+		if t.Kind != model.KindLanguage || t.Confidence < bestConf {
+			continue
+		}
+		switch t.Name {
+		case "NodeJS":
+			best, bestConf = "nodejs", t.Confidence
+		case "Go":
+			best, bestConf = "go", t.Confidence
+		case "Python":
+			best, bestConf = "python", t.Confidence
+		case "Java":
+			best, bestConf = "java", t.Confidence
+		}
+	}
+	return best
+}
+
+func containsTool(tools []string, name string) bool {
+	for _, t := range tools {
+		if t == name {
+			return true
+		}
+	}
+	return false
 }
 
 func structural(k pipeline.StageKind) bool {

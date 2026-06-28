@@ -18,7 +18,11 @@ func Technologies(w io.Writer, a model.Analysis) {
 	}
 	fmt.Fprintln(w, "Detected technologies:")
 	for _, t := range a.Technologies {
-		fmt.Fprintf(w, "  • %-14s %-18s %3.0f%%\n", t.Kind, t.Name, t.Confidence*100)
+		ver := t.Version
+		if ver != "" {
+			ver = "v" + ver
+		}
+		fmt.Fprintf(w, "  • %-14s %-18s %-10s %3.0f%%\n", t.Kind, t.Name, ver, t.Confidence*100)
 	}
 }
 

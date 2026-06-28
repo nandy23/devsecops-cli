@@ -213,6 +213,21 @@ tools:
     links:
       - https://github.com/aquasecurity/tfsec
 
+  - name: owasp-dependency-check
+    category: dependency_scan
+    purpose: OWASP's industry-standard Software Composition Analysis — detects publicly disclosed vulnerabilities in project dependencies.
+    advantages:
+      - Vendor-neutral OWASP standard, widely accepted for compliance
+      - Multi-ecosystem (Java, .NET, Node, Python, Ruby…)
+      - Maps to CVE/NVD with CVSS scores
+      - JSON/HTML/SARIF reports
+    when_to_use: Use as a baseline SCA gate, especially where an OWASP-standard tool is required for audits.
+    alternatives: [trivy, snyk, grype, dependabot]
+    stage: dependencies
+    license: Apache-2.0
+    links:
+      - https://owasp.org/www-project-dependency-check/
+
   - name: snyk
     category: dependency_scan
     purpose: Developer-first security platform for open-source dependencies, code, containers and IaC.

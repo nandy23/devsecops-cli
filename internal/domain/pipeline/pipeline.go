@@ -34,6 +34,7 @@ type Stage struct {
 type Spec struct {
 	Name     string  `json:"name"`
 	Platform string  `json:"platform"`
+	Lang     string  `json:"lang,omitempty"` // primary language: nodejs|go|python|java
 	Stages   []Stage `json:"stages"`
 }
 

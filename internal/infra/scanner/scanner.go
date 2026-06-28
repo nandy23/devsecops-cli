@@ -64,6 +64,10 @@ func Builtin() []port.ResultImporter {
 		Hadolint{},
 		Tfsec{},
 		Kubescape{},
+		OWASPDependencyCheck{},
+		NpmAudit{},
+		PipAudit{},
+		K8sManifest{},
 		SARIF{},
 	}
 }

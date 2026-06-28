@@ -20,6 +20,7 @@ const (
 	KindCIPlatform   TechKind = "ci_platform"
 	KindPackageMgr   TechKind = "package_manager"
 	KindSecurityTool TechKind = "security_tool"
+	KindLinter       TechKind = "linter"
 )
 
 // SecurityCategory is the lingua franca that links detectors, rules, scoring,

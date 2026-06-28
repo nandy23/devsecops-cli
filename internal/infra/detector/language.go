@@ -43,7 +43,9 @@ func (d LanguageDetector) Detect(_ context.Context, fsys port.FileSystem) ([]mod
 	var out []model.Technology
 	for _, s := range langSignals {
 		if p, ok := bases[lower(s.file)]; ok {
-			out = append(out, tech(model.KindLanguage, s.lang, s.confhit, p, "manifest "+s.file))
+			lt := tech(model.KindLanguage, s.lang, s.confhit, p, "manifest "+s.file)
+			lt.Version = langVersion(fsys, s.lang, p, bases)
+			out = append(out, lt)
 			out = append(out, tech(model.KindPackageMgr, s.pkgMgr, s.confhit, p, "manifest "+s.file))
 		}
 	}

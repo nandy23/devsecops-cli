@@ -96,6 +96,25 @@ func DefaultPlans() []Plan {
 				return []string{"scan", repo, "--format", "json", "--output", report}
 			},
 		},
+		{
+			// OWASP Dependency-Check: the industry-standard SCA tool.
+			Tool: "owasp-dependency-check", Bin: "dependency-check", ReportName: "dependency-check-report.json",
+			Args: func(repo, report string) []string {
+				return []string{"--scan", repo, "--format", "JSON", "--out", filepath.Dir(report), "--prettyPrint"}
+			},
+		},
+		{
+			Tool: "npm-audit", Bin: "npm", ReportName: "npm-audit.json", StdoutToFile: true,
+			Args: func(repo, report string) []string {
+				return []string{"audit", "--json"}
+			},
+		},
+		{
+			Tool: "pip-audit", Bin: "pip-audit", ReportName: "pip-audit.json", StdoutToFile: true,
+			Args: func(repo, report string) []string {
+				return []string{"--format", "json"}
+			},
+		},
 	}
 }
 
