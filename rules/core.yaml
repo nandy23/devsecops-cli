@@ -238,3 +238,22 @@ rules:
       via NSE scripts, flags exposures — catching unintended openings before an
       attacker does.
     weight_hint: 5
+
+  - id: dast-tls
+    description: Deployed services should have their TLS posture tested
+    category: dast
+    profiles: [strict]
+    when:
+      all:
+        - tech.kind: container
+          tech.name: Docker
+    recommend:
+      tool: sslyze
+      severity: low
+      stage: dast
+    rationale: >
+      A deployed service terminates TLS, so its transport security must be
+      verified against the live endpoint: weak protocols (SSLv3/TLS1.0), bad
+      ciphers, invalid or expiring certificates and TLS flaws like Heartbleed.
+      SSLyze (or testssl.sh) grades this posture in CI.
+    weight_hint: 5
