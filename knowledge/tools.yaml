@@ -256,3 +256,78 @@ tools:
     license: LGPL-3.0 (Community)
     links:
       - https://www.sonarsource.com
+
+  - name: zap
+    category: dast
+    purpose: Dynamic application security testing — actively probes a running web app for vulnerabilities from the outside.
+    advantages:
+      - Finds runtime issues SAST cannot see (auth, session, reflected XSS, misconfig)
+      - Baseline and full-scan modes fit CI (headless, Dockerized)
+      - Passive and active scanning with a large rule set
+      - JSON and SARIF output for CI ingestion
+    when_to_use: Use against a deployed/staging instance of a web app or API as a DAST gate, complementing SAST.
+    alternatives: [nuclei, burp, arachni, wapiti]
+    stage: dast
+    license: Apache-2.0
+    links:
+      - https://www.zaproxy.org
+
+  - name: nuclei
+    category: dast
+    purpose: Fast, template-driven vulnerability scanner for live hosts, web apps and APIs.
+    advantages:
+      - Thousands of community YAML templates (CVEs, misconfig, exposures)
+      - Very fast, low false positives, easy custom templates
+      - JSONL/JSON output for CI ingestion
+      - Great for continuous external attack-surface checks
+    when_to_use: Use as a lightweight DAST/attack-surface gate against running endpoints, alongside or before ZAP.
+    alternatives: [zap, nikto, wapiti]
+    stage: dast
+    license: MIT
+    links:
+      - https://github.com/projectdiscovery/nuclei
+
+  - name: dastardly
+    category: dast
+    purpose: Free, CI-focused DAST scanner from PortSwigger (Burp) for detecting security issues in web apps.
+    advantages:
+      - Purpose-built for CI — runs headless in a single Docker step
+      - Emits JUnit XML so pipelines can fail on findings
+      - Backed by Burp's scanning engine
+      - Zero configuration for a baseline scan
+    when_to_use: Use as a fast DAST gate against a running app in CI when you want Burp-quality checks without a license.
+    alternatives: [zap, nuclei, burp]
+    stage: dast
+    license: Proprietary (free)
+    links:
+      - https://www.zaproxy.org
+
+  - name: nikto
+    category: dast
+    purpose: Classic web server scanner that checks for dangerous files, outdated software and server misconfigurations.
+    advantages:
+      - Very fast, single Perl script, easy to run
+      - Thousands of checks for server-level issues
+      - JSON/XML/CSV output for CI ingestion
+      - Complements app-level scanners with server-level coverage
+    when_to_use: Use for a quick server-level DAST pass against a running host, alongside ZAP/Nuclei.
+    alternatives: [zap, nuclei, wapiti]
+    stage: dast
+    license: GPL-2.0
+    links:
+      - https://github.com/sullo/nikto
+
+  - name: nmap
+    category: recon
+    purpose: Network mapper that discovers hosts, open ports and services, and runs NSE scripts including vuln checks.
+    advantages:
+      - The de-facto standard for attack-surface discovery
+      - NSE scripting engine adds service/vuln detection
+      - XML output for CI ingestion
+      - Fast, ubiquitous, scriptable
+    when_to_use: Use to enumerate the externally reachable attack surface of a deployed service and catch unexpected exposures.
+    alternatives: [masscan, amass, rustscan]
+    stage: recon
+    license: NPSL (Nmap Public Source License)
+    links:
+      - https://nmap.org
