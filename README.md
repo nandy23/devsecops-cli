@@ -27,6 +27,7 @@ go install github.com/nandy23/devsecops-cli/cmd/devsec@latest
 | `score`   | Security maturity 0–100 across 9 categories |
 | `scan`    | Run locally-installed scanners (trivy, gitleaks, semgrep, snyk…) + ingest |
 | `init`    | Generate a real pipeline (GitHub / GitLab / Azure / Jenkins) |
+| `config`  | Generate scanner config files (sonar-project.properties, trivy.yaml, .gitleaks.toml…) for the detected stack |
 | `tool`    | Wrap a CLI with config injected (`devsec tool sonar-scanner -- ...`) |
 | `connect` | Pull findings from platforms (SonarQube, Harbor, Vault…) |
 | `explain` | Explain a tool (purpose, when to use, alternatives) |

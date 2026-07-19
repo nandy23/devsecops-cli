@@ -51,6 +51,7 @@ func NewRoot(version string) *cobra.Command {
 		newDoctorCmd(opts, build),
 		newScoreCmd(opts, build),
 		newInitCmd(opts, build),
+		newConfigCmd(opts, build),
 		newExplainCmd(opts, build),
 		newReportCmd(opts, build),
 		newGraphCmd(opts, build),
