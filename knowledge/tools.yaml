@@ -317,6 +317,36 @@ tools:
     links:
       - https://github.com/sullo/nikto
 
+  - name: sslyze
+    category: dast
+    purpose: Fast, reliable TLS/SSL configuration analyzer for a running endpoint.
+    advantages:
+      - Checks protocols, cipher suites, certificate validity and renegotiation
+      - Detects Heartbleed, CCS injection, ROBOT and other TLS flaws
+      - Machine-readable JSON output for CI ingestion
+      - No external dependencies, scriptable
+    when_to_use: Use to gate the TLS posture of a deployed service — weak protocols, bad ciphers, invalid or expiring certificates.
+    alternatives: [testssl, nmap, openssl]
+    stage: dast
+    license: AGPL-3.0
+    links:
+      - https://github.com/nabla-c0d3/sslyze
+
+  - name: testssl
+    category: dast
+    purpose: Command-line tool that checks a server's TLS/SSL service on any port for supported protocols, ciphers and known flaws.
+    advantages:
+      - Single POSIX shell script, no installation
+      - Graded findings (LOW..CRITICAL) with CVE references
+      - Flat and pretty JSON output for CI ingestion
+      - Broad coverage of TLS vulnerabilities and misconfigurations
+    when_to_use: Use as a portable TLS posture gate against a running endpoint, alongside or instead of sslyze.
+    alternatives: [sslyze, nmap, openssl]
+    stage: dast
+    license: GPL-2.0
+    links:
+      - https://github.com/testssl/testssl.sh
+
   - name: nmap
     category: recon
     purpose: Network mapper that discovers hosts, open ports and services, and runs NSE scripts including vuln checks.

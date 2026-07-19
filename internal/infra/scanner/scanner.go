@@ -72,6 +72,8 @@ func Builtin() []port.ResultImporter {
 		Nuclei{},
 		Dastardly{},
 		Nikto{},
+		SSLyze{},
+		TestSSL{},
 		Nmap{},
 		SARIF{},
 	}
