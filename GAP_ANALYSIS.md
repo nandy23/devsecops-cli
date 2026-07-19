@@ -38,7 +38,7 @@
 | S4 | ~~**DAST** (ZAP / Nuclei / Dastardly / Nikto)~~ | ✅ **DONE** | Importer `zap`, `nuclei`, `dastardly`, `nikto`; kategori `dast` (weight 5); rule `dast-zap` (strict); knowledge lengkap | — |
 | S9 | ~~**Recon / attack surface** (Nmap)~~ | ✅ **DONE** | Kategori baru `recon` (weight 5); importer `nmap` (XML, open ports + NSE vuln scripts); rule `recon-nmap` (strict); knowledge `nmap` | — |
 | S5 | **CodeQL** — hanya di knowledge base | 🟡 | Deep taint analysis belum tersedia | 🟠 Med |
-| S6 | **Generator config file** (`sonar-project.properties`, `trivy.yaml`, `checkov.yaml`, `gitleaks.toml`, `syft.yaml`, `ansible-lint.yml`) | ❌ | PRODUCT menjanjikan, generator baru bikin pipeline | 🔴 High |
+| S6 | ~~**Generator config file** (`sonar-project.properties`, `trivy.yaml`, `.checkov.yaml`, `.gitleaks.toml`, `syft.yaml`, `.hadolint.yaml`, `.ansible-lint`)~~ | ✅ **DONE** | Command `devsec config` — generate config scanner dari hasil detect; preview `--dry-run`, idempotent (skip existing, `--force`); tanpa secret | — |
 | S7 | **Compliance mapping** (CIS / PCI / SOC2 / OWASP ASVS) | ❌ | Skor per-kategori saja, belum dipetakan ke standar | 🟠 Med |
 | S8 | **License compliance** dependency | ❌ | SCA baru cari CVE, belum cek lisensi | 🟢 Low |
 

@@ -6,6 +6,7 @@ package di
 
 import (
 	assets "github.com/nandy23/devsecops-cli"
+	appconfiggen "github.com/nandy23/devsecops-cli/internal/app/configgen"
 	appconnect "github.com/nandy23/devsecops-cli/internal/app/connect"
 	appdetect "github.com/nandy23/devsecops-cli/internal/app/detect"
 	appdoctor "github.com/nandy23/devsecops-cli/internal/app/doctor"
@@ -40,18 +41,19 @@ type Container struct {
 	Config  config.Config
 	Version string
 
-	Detect   *appdetect.Service
-	Doctor   *appdoctor.Service
-	Generate *appgenerate.Service
-	Score    *appscore.Service
-	Report   *appreport.Service
-	Graph    *appgraph.Service
-	Explain  *appexplain.Service
-	Connect  *appconnect.Service
-	Import   *appimport.Service
-	Scan     *appscan.Service
-	Tool     *apptool.Service
-	Fix      *appfix.Service
+	Detect    *appdetect.Service
+	Doctor    *appdoctor.Service
+	Generate  *appgenerate.Service
+	ConfigGen *appconfiggen.Service
+	Score     *appscore.Service
+	Report    *appreport.Service
+	Graph     *appgraph.Service
+	Explain   *appexplain.Service
+	Connect   *appconnect.Service
+	Import    *appimport.Service
+	Scan      *appscan.Service
+	Tool      *apptool.Service
+	Fix       *appfix.Service
 }
 
 // Build assembles the container from config.
@@ -93,20 +95,21 @@ func Build(cfg config.Config, version string, log port.Logger) (*Container, erro
 	toolSvc := apptool.New(runner, toolSpecs(cfg))
 
 	c := &Container{
-		Config:   cfg,
-		Version:  version,
-		Detect:   detectSvc,
-		Doctor:   appdoctor.New(detectSvc, infrapipeline.Builtin(), importSvc, connectSvc),
-		Generate: appgenerate.New(generator.Builtin(assets.Templates)),
-		Score:    appscore.New(scorer),
-		Report:   appreport.New(reporters, scorer),
-		Graph:    appgraph.New(mermaid.Renderer{}),
-		Explain:  appexplain.New(kb),
-		Connect:  connectSvc,
-		Import:   importSvc,
-		Scan:     scanSvc,
-		Tool:     toolSvc,
-		Fix:      appfix.New(detectSvc, fixer.Builtin()),
+		Config:    cfg,
+		Version:   version,
+		Detect:    detectSvc,
+		Doctor:    appdoctor.New(detectSvc, infrapipeline.Builtin(), importSvc, connectSvc),
+		Generate:  appgenerate.New(generator.Builtin(assets.Templates)),
+		ConfigGen: appconfiggen.New(),
+		Score:     appscore.New(scorer),
+		Report:    appreport.New(reporters, scorer),
+		Graph:     appgraph.New(mermaid.Renderer{}),
+		Explain:   appexplain.New(kb),
+		Connect:   connectSvc,
+		Import:    importSvc,
+		Scan:      scanSvc,
+		Tool:      toolSvc,
+		Fix:       appfix.New(detectSvc, fixer.Builtin()),
 	}
 	return c, nil
 }
