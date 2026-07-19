@@ -68,6 +68,8 @@ func (j *Jenkins) Validate(ctx context.Context) error {
 // present in a Jenkins pipeline definition.
 var jenkinsSignatures = map[model.SecurityCategory][]string{
 	model.CatSAST:           {"semgrep", "codeql", "sonar", "sonarqube"},
+	model.CatDAST:           {"zap", "owasp-zap", "nuclei", "dastardly", "nikto", "dast"},
+	model.CatRecon:          {"nmap", "masscan", "amass", "recon"},
 	model.CatSecretScan:     {"gitleaks", "trufflehog", "detect-secrets"},
 	model.CatDependencyScan: {"dependency-check", "owasp", "snyk", "trivy fs"},
 	model.CatIaCScan:        {"checkov", "terrascan", "tfsec", "kics"},

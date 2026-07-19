@@ -68,6 +68,11 @@ func Builtin() []port.ResultImporter {
 		NpmAudit{},
 		PipAudit{},
 		K8sManifest{},
+		ZAP{},
+		Nuclei{},
+		Dastardly{},
+		Nikto{},
+		Nmap{},
 		SARIF{},
 	}
 }

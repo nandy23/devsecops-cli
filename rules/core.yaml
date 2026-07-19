@@ -200,3 +200,41 @@ rules:
       vulnerability database and auto-fix pull requests. Recommended in the
       strict profile as an additional dependency-scanning option.
     weight_hint: 10
+
+  - id: dast-zap
+    description: Deployable web services should get dynamic (DAST) testing
+    category: dast
+    profiles: [strict]
+    when:
+      all:
+        - tech.kind: container
+          tech.name: Docker
+    recommend:
+      tool: zap
+      severity: medium
+      stage: dast
+    rationale: >
+      A containerized service is deployed and reachable, so it needs testing
+      from the outside — not just static analysis. OWASP ZAP probes the running
+      app for auth, session, injection and misconfiguration issues that SAST
+      cannot see. Run it against a staging instance as a DAST gate.
+    weight_hint: 5
+
+  - id: recon-nmap
+    description: Deployed services should have their attack surface mapped
+    category: recon
+    profiles: [strict]
+    when:
+      all:
+        - tech.kind: container
+          tech.name: Docker
+    recommend:
+      tool: nmap
+      severity: low
+      stage: recon
+    rationale: >
+      A deployed service exposes ports to the network. Nmap enumerates the
+      externally reachable attack surface (open ports, services, versions) and,
+      via NSE scripts, flags exposures — catching unintended openings before an
+      attacker does.
+    weight_hint: 5

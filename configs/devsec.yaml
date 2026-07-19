@@ -27,14 +27,16 @@ scoring:
   # Override the default category weights (must reflect your risk model).
   weights:
     sast: 10
+    dast: 5
+    recon: 5
     secret_scan: 10
     dependency_scan: 10
     iac_scan: 10
     sbom: 15
     container_scan: 15
     signing: 10
-    policy: 10
-    runtime: 10
+    policy: 5
+    runtime: 5
 
 generate:
   platform: github   # github | gitlab

@@ -15,6 +15,8 @@ import (
 // category is already present in a pipeline definition.
 var stageSignature = map[model.SecurityCategory][]string{
 	model.CatSAST:           {"semgrep", "codeql", "sonar", "sonarqube"},
+	model.CatDAST:           {"zap", "owasp-zap", "nuclei", "dastardly", "nikto", "dast", "arachni", "wapiti"},
+	model.CatRecon:          {"nmap", "masscan", "amass", "recon"},
 	model.CatSecretScan:     {"gitleaks", "trufflehog", "detect-secrets"},
 	model.CatDependencyScan: {"dependency", "npm audit", "trivy fs", "snyk", "owasp"},
 	model.CatIaCScan:        {"checkov", "terrascan", "tfsec", "kics"},
