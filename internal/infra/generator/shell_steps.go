@@ -13,7 +13,7 @@ func toolShell(tool string, kind pipeline.StageKind) []string {
 		if kind == pipeline.StageContainerScan {
 			return []string{"trivy image --format json --output trivy-image.json --severity HIGH,CRITICAL \"$IMAGE\""}
 		}
-		return []string{"trivy fs --scanners vuln,misconfig,secret --format json --output trivy.json ."}
+		return []string{"trivy fs --scanners vuln,misconfig,secret,license --format json --output trivy.json ."}
 	case "semgrep":
 		return []string{"semgrep scan --config auto --json --output semgrep.json"}
 	case "sonarqube":

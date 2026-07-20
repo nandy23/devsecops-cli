@@ -257,3 +257,27 @@ rules:
       ciphers, invalid or expiring certificates and TLS flaws like Heartbleed.
       SSLyze (or testssl.sh) grades this posture in CI.
     weight_hint: 5
+
+  - id: license-trivy
+    description: Dependencies should be checked for risky open-source licenses
+    category: license
+    profiles: [strict]
+    when:
+      any:
+        - tech.kind: package_manager
+          tech.name: npm
+        - tech.kind: package_manager
+          tech.name: pip
+        - tech.kind: package_manager
+          tech.name: maven
+        - tech.kind: package_manager
+          tech.name: go modules
+    recommend:
+      tool: trivy
+      severity: low
+      stage: dependencies
+    rationale: >
+      Restrictive or copyleft licenses (GPL, AGPL) in dependencies can create
+      legal/compliance risk for a product. Trivy's license scanner
+      (`--scanners license`) flags them so legal review happens before release.
+    weight_hint: 5

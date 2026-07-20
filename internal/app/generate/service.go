@@ -37,11 +37,15 @@ func (s *Service) Platforms() []string {
 // BuildSpec turns an analysis into a pipeline IR, including only stages that
 // apply to the detected technologies and recommendations.
 func BuildSpec(a model.Analysis, platform string) pipeline.Spec {
-	// Map recommended tools onto their pipeline stages.
+	// Map recommended tools onto their pipeline stages, de-duplicating so a tool
+	// recommended for the same stage by multiple rules (e.g. trivy for both
+	// dependency and license scanning) yields a single job.
 	stageTools := map[pipeline.StageKind][]string{}
 	for _, r := range a.Recommendations {
 		k := stageKind(r.Stage)
-		stageTools[k] = append(stageTools[k], r.Tool)
+		if !containsTool(stageTools[k], r.Tool) {
+			stageTools[k] = append(stageTools[k], r.Tool)
+		}
 	}
 
 	// Always offer SonarQube (sonar-scanner CLI) as a SAST step alongside the

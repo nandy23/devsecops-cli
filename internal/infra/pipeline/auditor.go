@@ -19,6 +19,7 @@ var stageSignature = map[model.SecurityCategory][]string{
 	model.CatRecon:          {"nmap", "masscan", "amass", "recon"},
 	model.CatSecretScan:     {"gitleaks", "trufflehog", "detect-secrets"},
 	model.CatDependencyScan: {"dependency", "npm audit", "trivy fs", "snyk", "owasp"},
+	model.CatLicense:        {"license", "scancode", "fossa", "license-finder", "licensee"},
 	model.CatIaCScan:        {"checkov", "terrascan", "tfsec", "kics"},
 	model.CatContainerScan:  {"trivy", "grype", "clair"},
 	model.CatSBOM:           {"syft", "sbom", "cyclonedx", "spdx"},

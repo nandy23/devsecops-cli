@@ -72,6 +72,7 @@ var jenkinsSignatures = map[model.SecurityCategory][]string{
 	model.CatRecon:          {"nmap", "masscan", "amass", "recon"},
 	model.CatSecretScan:     {"gitleaks", "trufflehog", "detect-secrets"},
 	model.CatDependencyScan: {"dependency-check", "owasp", "snyk", "trivy fs"},
+	model.CatLicense:        {"license", "scancode", "fossa", "license-finder", "licensee"},
 	model.CatIaCScan:        {"checkov", "terrascan", "tfsec", "kics"},
 	model.CatContainerScan:  {"trivy image", "trivy ", "grype", "clair"},
 	model.CatSBOM:           {"syft", "cyclonedx", "sbom"},

@@ -31,10 +31,11 @@ scoring:
     recon: 5
     secret_scan: 10
     dependency_scan: 10
+    license: 5
     iac_scan: 10
     sbom: 15
     container_scan: 15
-    signing: 10
+    signing: 5
     policy: 5
     runtime: 5
 

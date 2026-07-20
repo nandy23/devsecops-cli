@@ -34,6 +34,7 @@ const (
 	CatRecon          SecurityCategory = "recon"
 	CatSecretScan     SecurityCategory = "secret_scan"
 	CatDependencyScan SecurityCategory = "dependency_scan"
+	CatLicense        SecurityCategory = "license"
 	CatIaCScan        SecurityCategory = "iac_scan"
 	CatSBOM           SecurityCategory = "sbom"
 	CatContainerScan  SecurityCategory = "container_scan"
@@ -45,7 +46,7 @@ const (
 // AllCategories returns every security category in canonical order.
 func AllCategories() []SecurityCategory {
 	return []SecurityCategory{
-		CatSAST, CatDAST, CatRecon, CatSecretScan, CatDependencyScan, CatIaCScan, CatSBOM,
+		CatSAST, CatDAST, CatRecon, CatSecretScan, CatDependencyScan, CatLicense, CatIaCScan, CatSBOM,
 		CatContainerScan, CatSigning, CatPolicy, CatRuntime,
 	}
 }
