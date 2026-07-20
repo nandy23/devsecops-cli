@@ -52,7 +52,7 @@ func newInitCmd(opts *Options, build containerBuilder) *cobra.Command {
 			return nil
 		},
 	}
-	cmd.Flags().StringVar(&platform, "platform", "", "target platform: github | gitlab | azure | jenkins (default from config)")
+	cmd.Flags().StringVar(&platform, "platform", "", "target platform: github | gitlab | azure | jenkins | bitbucket | circleci (default from config)")
 	cmd.Flags().BoolVar(&dryRun, "dry-run", false, "print generated files instead of writing them")
 	return cmd
 }
