@@ -32,8 +32,8 @@
 
 | # | Gap | Status | Dampak | Prioritas |
 |---|-----|--------|--------|-----------|
-| S1 | **SBOM generation (`syft`)** — disebut di PRODUCT & knowledge, scanner belum ada | ❌ | Stage SBOM punya rule tapi kosong runner | 🔴 High |
-| S2 | **Image signing (`cosign`)** — rule stage `artifact` ada, runner belum ada | ❌ | Klaim signing belum terbukti | 🔴 High |
+| S1 | ~~**SBOM generation (`syft`)**~~ | ✅ **DONE** | Importer `syft` (SPDX + CycloneDX) → kredit kategori `sbom`; rule `sbom-syft` sudah ada, kini runner-nya terisi | — |
+| S2 | ~~**Image signing (`cosign`)**~~ | ✅ **DONE** | Importer `cosign` (parse `cosign verify -o json`) → kredit kategori `signing`; pipeline command hasilkan `cosign.json` untuk di-ingest | — |
 | S3 | **IaC selain Terraform (`checkov` / `terrascan`)** — hanya `tfsec` | ❌ | K8s/Helm/CloudFormation/ARM belum benar-benar di-scan | 🔴 High |
 | S4 | ~~**DAST** (ZAP / Nuclei / Dastardly / Nikto)~~ | ✅ **DONE** | Importer `zap`, `nuclei`, `dastardly`, `nikto`; kategori `dast` (weight 5); rule `dast-zap` (strict); knowledge lengkap | — |
 | S4b | ~~**TLS/transport testing** (sslyze / testssl)~~ | ✅ **DONE** | Importer `sslyze` (JSON) + `testssl` (flat JSON); kategori `dast`; rule `dast-tls` (strict); knowledge `sslyze`/`testssl` | — |

@@ -35,7 +35,9 @@ func toolShell(tool string, kind pipeline.StageKind) []string {
 	case "syft":
 		return []string{"syft . -o spdx-json=sbom.spdx.json"}
 	case "cosign":
-		return []string{`echo "cosign sign --yes <registry>/app:$CI_COMMIT_SHA  # set your pushed image"`}
+		// Placeholder: set <IMAGE> to your pushed image. Signing then verifying
+		// into cosign.json lets `devsec` ingest proof that signing is in place.
+		return []string{`echo 'cosign sign --yes <IMAGE> && cosign verify <IMAGE> --output json > cosign.json'`}
 	case "snyk":
 		return []string{"snyk test --json > snyk.json || true"}
 	case "owasp-dependency-check":
