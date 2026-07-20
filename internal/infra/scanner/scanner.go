@@ -75,6 +75,8 @@ func Builtin() []port.ResultImporter {
 		SSLyze{},
 		TestSSL{},
 		Nmap{},
+		Syft{},
+		Cosign{},
 		SARIF{},
 	}
 }
