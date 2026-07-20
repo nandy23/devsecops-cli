@@ -45,6 +45,13 @@ type trivyResult struct {
 		Severity  string `json:"Severity"`
 		StartLine int    `json:"StartLine"`
 	} `json:"Secrets"`
+	Licenses []struct {
+		Severity string `json:"Severity"`
+		Category string `json:"Category"` // restricted | reciprocal | notice | permissive | unencumbered | unknown
+		PkgName  string `json:"PkgName"`
+		Name     string `json:"Name"` // the license identifier, e.g. GPL-3.0
+		FilePath string `json:"FilePath"`
+	} `json:"Licenses"`
 }
 
 // classCategory maps a Trivy result Class to a devsec category.
@@ -85,6 +92,22 @@ func (t Trivy) Import(_ context.Context, fsys port.FileSystem) ([]model.ScanResu
 		res := model.ScanResult{Tool: t.Tool(), Source: path}
 		seen := map[model.SecurityCategory]bool{}
 		for _, r := range rep.Results {
+			// Licenses (from `trivy ... --scanners license`) live on their own
+			// result Class ("license"), so handle them before the class switch.
+			if len(r.Licenses) > 0 {
+				if !seen[model.CatLicense] {
+					seen[model.CatLicense] = true
+					res.Covers = append(res.Covers, model.CatLicense)
+				}
+				for _, l := range r.Licenses {
+					loc := l.PkgName
+					if l.FilePath != "" {
+						loc = l.FilePath
+					}
+					res.Findings = append(res.Findings, finding(t.Tool(), path, model.CatLicense, severityFromWord(l.Severity),
+						fmt.Sprintf("%s license %s in %s", l.Category, l.Name, l.PkgName), loc))
+				}
+			}
 			cat, ok := classCategory(r.Class)
 			if !ok {
 				continue

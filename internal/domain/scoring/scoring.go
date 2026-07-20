@@ -8,9 +8,10 @@ import (
 )
 
 // DefaultWeights is the canonical weighting (sums to 100). Late-stage / advanced
-// controls that fewer teams adopt (dast, recon, policy, runtime) are weighted 5
-// each; core shift-left controls are 10; the supply-chain emphasis (SBOM,
-// container_scan) stays at 15. Override via config scoring.weights.
+// or compliance controls that fewer teams adopt (dast, recon, license, signing,
+// policy, runtime) are weighted 5 each; core shift-left controls are 10; the
+// supply-chain emphasis (SBOM, container_scan) stays at 15. Override via config
+// scoring.weights.
 func DefaultWeights() map[model.SecurityCategory]int {
 	return map[model.SecurityCategory]int{
 		model.CatSAST:           10,
@@ -18,10 +19,11 @@ func DefaultWeights() map[model.SecurityCategory]int {
 		model.CatRecon:          5,
 		model.CatSecretScan:     10,
 		model.CatDependencyScan: 10,
+		model.CatLicense:        5,
 		model.CatIaCScan:        10,
 		model.CatSBOM:           15,
 		model.CatContainerScan:  15,
-		model.CatSigning:        10,
+		model.CatSigning:        5,
 		model.CatPolicy:         5,
 		model.CatRuntime:        5,
 	}
