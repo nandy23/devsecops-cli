@@ -125,3 +125,13 @@ func TestCircleCI_Structure(t *testing.T) {
 	}
 	assertValidYAML(t, "circleci", out)
 }
+
+func TestToolShell_OWASPDependencyCheck_UsesNVDAPIKey(t *testing.T) {
+	cmds := toolShell("owasp-dependency-check", pipeline.StageDependencies)
+	if len(cmds) != 1 {
+		t.Fatalf("want 1 command, got %v", cmds)
+	}
+	if !strings.Contains(cmds[0], "--nvdApiKey") || !strings.Contains(cmds[0], "NVD_API_KEY") {
+		t.Fatalf("owasp-dependency-check command must reference the NVD API key, got: %s", cmds[0])
+	}
+}

@@ -39,7 +39,9 @@ func toolShell(tool string, kind pipeline.StageKind) []string {
 	case "snyk":
 		return []string{"snyk test --json > snyk.json || true"}
 	case "owasp-dependency-check":
-		return []string{"dependency-check --scan . --format JSON --out ."}
+		// --nvdApiKey avoids severe NVD rate limiting; set NVD_API_KEY in CI.
+		// --data caches the NVD DB between runs so it is not re-downloaded.
+		return []string{`dependency-check --scan . --format JSON --out . --nvdApiKey "$NVD_API_KEY" --data .dependency-check`}
 	default:
 		return []string{"echo \"TODO: run " + tool + "\""}
 	}

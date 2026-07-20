@@ -201,6 +201,32 @@ rules:
       strict profile as an additional dependency-scanning option.
     weight_hint: 10
 
+  - id: dependency-owaspdc
+    description: OWASP Dependency-Check provides an audit-grade SCA baseline
+    category: dependency_scan
+    profiles: [strict]
+    when:
+      any:
+        - tech.kind: package_manager
+          tech.name: npm
+        - tech.kind: package_manager
+          tech.name: pip
+        - tech.kind: package_manager
+          tech.name: maven
+        - tech.kind: package_manager
+          tech.name: go modules
+    recommend:
+      tool: owasp-dependency-check
+      severity: high
+      stage: dependencies
+    rationale: >
+      OWASP Dependency-Check is the vendor-neutral OWASP standard for software
+      composition analysis, often required for compliance/audits. It is heavy
+      (JVM-based, downloads the full NVD database and needs an NVD API key), so
+      it is a strict-profile opt-in — Trivy remains the fast default. Set the
+      NVD_API_KEY CI variable to avoid severe rate limiting.
+    weight_hint: 10
+
   - id: dast-zap
     description: Deployable web services should get dynamic (DAST) testing
     category: dast
