@@ -53,7 +53,7 @@
 | D2 | **Bahasa tambahan** — .NET/C#, TypeScript eksplisit, Scala, Elixir, C/C++, Dart/Flutter | ❌ | Repo non-listed tidak terdeteksi | 🟠 Med |
 | D3 | **Connector platform Git** — GitHub / GitLab / Azure DevOps (hanya Jenkins) | ❌ | Tidak bisa audit branch policy / PR gate / Actions | 🔴 High |
 | D4 | **Artifactory** connector (baru JFrog Xray) | ❌ | Registry Artifactory belum tercakup | 🟢 Low |
-| D5 | **CI generator tambahan** — Bitbucket, Travis, Tekton, ArgoCD, Drone (CircleCI kedetek tapi tanpa template) | ❌ | Platform CI lain belum di-generate | 🟠 Med |
+| D5 | ~~**CI generator tambahan** — Bitbucket, CircleCI~~ (Travis, Tekton, ArgoCD, Drone menyusul) | ✅ **DONE** | Generator `bitbucket` (`bitbucket-pipelines.yml`) + `circleci` (`.circleci/config.yml`); reuse shell steps; output tervalidasi YAML | 🟠 (sisa) |
 | D6 | **Deteksi cloud** (AWS / GCP / Azure resources) — disebut di ARCHITECTURE | ❌ | Konteks cloud belum masuk rekomendasi | 🟠 Med |
 | D7 | **GitOps / deploy** (ArgoCD, Flux, Helm release) | ❌ | Stage deploy belum lengkap | 🟢 Low |
 | D8 | **CloudFormation** detection di infra | ❌ | IaC AWS-native belum dikenali | 🟢 Low |

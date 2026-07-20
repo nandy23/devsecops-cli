@@ -48,5 +48,7 @@ func Builtin(templates fs.FS) []port.PipelineGenerator {
 		templated{"gitlab", "templates/gitlab/gitlab-ci.yml.tmpl", ".gitlab-ci.yml", templates, GitLabFuncs()},
 		templated{"azure", "templates/azure/azure-pipelines.yml.tmpl", "azure-pipelines.yml", templates, AzureFuncs()},
 		templated{"jenkins", "templates/jenkins/Jenkinsfile.tmpl", "Jenkinsfile", templates, JenkinsFuncs()},
+		templated{"bitbucket", "templates/bitbucket/bitbucket-pipelines.yml.tmpl", "bitbucket-pipelines.yml", templates, BitbucketFuncs()},
+		templated{"circleci", "templates/circleci/config.yml.tmpl", ".circleci/config.yml", templates, CircleCIFuncs()},
 	}
 }
